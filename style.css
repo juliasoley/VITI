@@ -2,12 +2,12 @@
 body {
   font-family: Arial, sans-serif;
   text-align: center;
-  background: linear-gradient(160deg, #7f8fe76b, #6a30e58d); /* Purple gradient */
+  background: linear-gradient(160deg, #d9df1d6b, #6a30e58d); /* Purple gradient */
   min-height: 100vh;
 }
 
 h1 {
-  color: #170331;
+  color: #240c7b;
 }
 
 #game-container {
@@ -78,7 +78,7 @@ h1 {
 button {
   appearance: none;
   border: none;
-  background: linear-gradient(145deg, #ff9de3, #ffa7f5); /* Soft pink gradient */
+  background: linear-gradient(145deg, #9029f7, #782af5); /* Soft pink gradient */
   border-radius: 20px; /* Rounded corners */
   padding: 12px 24px; /* Add proper padding */
   color: #fff;
@@ -91,7 +91,7 @@ button {
 }
 
 button:hover {
-  background: linear-gradient(145deg, #ff88d9, #ff99ee); /* Brighter pink */
+  background: linear-gradient(145deg, #624aec, #4f43f1); /* Brighter pink */
   transform: scale(1.1); /* Slightly grow */
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Stronger shadow */
 }
