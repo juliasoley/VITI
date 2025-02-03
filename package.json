@@ -1,16 +1,30 @@
 {
   "dependencies": {
-    "phaser": "^3.87.0"
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "mongodb": "^6.13.0",
+    "mongoose": "^8.9.6",
+    "pg": "^8.13.1",
+    "phaser": "^3.87.0",
+    "sqlite3": "^5.1.7"
   },
   "name": "viti",
   "version": "1.0.0",
   "main": "index.js",
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "VITI",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/juliasoley/VITI.git"
+  },
+  "bugs": {
+    "url": "https://github.com/juliasoley/VITI/issues"
+  },
+  "homepage": "https://github.com/juliasoley/VITI#readme"
 }

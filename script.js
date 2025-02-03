@@ -132,6 +132,29 @@ function resetGame() {
   startGame();
 }
 
+
+// Initialize or retrieve stats
+let stats = JSON.parse(localStorage.getItem("stats")) || { matches: 0, gamesPlayed: 0 };
+
+// Update stats
+function updateStats(matches) {
+    stats.matches += matches;
+    stats.gamesPlayed += 1;
+    localStorage.setItem("stats", JSON.stringify(stats)); // Save stats
+}
+
+// Display stats (e.g., after a game ends)
+function showStats() {
+    const username = localStorage.getItem("username");
+    alert(`${username}'s Stats:\nMatches: ${stats.matches}\nGames Played: ${stats.gamesPlayed}`);
+}
+
+// Call `updateStats()` when a game ends
+document.getElementById("resetBtn").addEventListener("click", () => {
+    updateStats(matchesFound); // Update stats with matches found
+    showStats(); // Display stats
+});
+
 document.getElementById("startBtn").addEventListener("click", startGame);
 document.getElementById("resetBtn").addEventListener("click", resetGame);
 

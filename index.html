@@ -21,5 +21,12 @@
  
 
   <script src="script.js"></script>
+
+  <script>
+    if (!localStorage.getItem("username")) {
+        window.location.href = "login.html"; // Redirect to login page if not logged in
+    }
+</script>
+
 </body>
 </html>
