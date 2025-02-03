@@ -94,6 +94,9 @@
             margin-top: 1.5rem;
             color: #666;
             font-size: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
         }
 
         .footer-text a {
@@ -117,10 +120,16 @@
         <button id="login-btn">Login</button>
         <div class="error-message" id="error-message">Please enter a valid username.</div>
         <div class="footer-text">
-            New here? <a href="#">Create an account</a>
+            <span>New here? <a href="#">Create an account</a></span>
+            <span id="logout-message" style="display: none;">You have been successfully logged out.</span>
         </div>
     </div>
     <script>
+        // Show logout message if redirected from logout
+        if (window.location.search.includes('logout=true')) {
+            document.getElementById('logout-message').style.display = 'block';
+        }
+
         const loginBtn = document.getElementById('login-btn');
         const usernameInput = document.getElementById('username');
         const errorMessage = document.getElementById('error-message');

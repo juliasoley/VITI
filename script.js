@@ -132,6 +132,12 @@ function resetGame() {
   startGame();
 }
 
+// Add logout functionality to reset stats
+function logout() {
+    localStorage.removeItem('username');
+    localStorage.removeItem('stats');
+    window.location.href = 'login.html?logout=true';
+}
 
 // Initialize or retrieve stats
 let stats = JSON.parse(localStorage.getItem("stats")) || { matches: 0, gamesPlayed: 0 };
