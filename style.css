@@ -156,7 +156,7 @@ button:active {
 
 .analysis-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(106, 48, 229, 0.3);
+    box-shadow: 0 5px 15px rgba(153, 110, 244, 0.3);
 }
 
 .back-btn {
@@ -195,4 +195,53 @@ button:active {
 .logout-btn:hover {
     background: #e0e0e0;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.ghost-block {
+    z-index: 1000;
+    transition: transform 0.1s ease;
+}
+
+.highlight {
+    background-color: rgba(0, 255, 0, 0.3) !important;
+    border: 2px dashed #008000 !important;
+    animation: pulse 0.5s infinite alternate;
+}
+
+@keyframes pulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.05); }
+}
+
+/* Update grid and block styles */
+#grid {
+    display: grid;
+    grid-template-columns: repeat(8, 50px);
+    grid-template-rows: repeat(8, 50px);
+    gap: 2px;
+    background-color: #444;
+    padding: 2px;
+    border-radius: 6px;
+}
+
+.cell {
+    background-color: #666;
+    border: 1px solid #555;
+    border-radius: 4px;
+}
+
+.block {
+    background-color: #FFA500;
+    border: 2px solid #FF8C00;
+    border-radius: 4px;
+}
+
+/* Add this to make the blocks stand out more */
+.block-piece {
+    transform: scale(1.02);
+    transition: transform 0.2s ease;
+}
+
+.block-piece:active {
+    transform: scale(1.01);
 }

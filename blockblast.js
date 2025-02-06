@@ -3,6 +3,9 @@ let grid = [];
 let blocks = [];
 let score = 0;
 let blocksPlaced = 0; // Track how many blocks have been placed in the current round
+let ghostBlock = null; // Add ghost block reference
+let grabOffsetX = 0;
+let grabOffsetY = 0;
 
 // Initialize the grid
 function createGrid() {
@@ -59,24 +62,32 @@ function generateBlocks() {
         // Render the block shape
         const shapeContainer = document.createElement('div');
         shapeContainer.style.display = 'grid';
-        shapeContainer.style.gridTemplateColumns = `repeat(${shape[0].length}, 25px)`;
-        shapeContainer.style.gridTemplateRows = `repeat(${shape.length}, 25px)`;
+        shapeContainer.style.gridTemplateColumns = `repeat(${shape[0].length}, 40px)`;
+        shapeContainer.style.gridTemplateRows = `repeat(${shape.length}, 40px)`;
         shapeContainer.style.gap = '2px';
 
         for (let y = 0; y < shape.length; y++) {
             for (let x = 0; x < shape[y].length; x++) {
                 const cell = document.createElement('div');
-                cell.style.backgroundColor = shape[y][x] ? '#FFA500' : 'transparent';
-                cell.style.border = shape[y][x] ? '1px solid #FF8C00' : 'none';
-                cell.style.borderRadius = '3px';
+                cell.style.backgroundColor = shape[y][x] ? '#a461e4' : 'transparent';
+                cell.style.border = shape[y][x] ? '2px solid #71168d' : 'none';
+                cell.style.borderRadius = '5px';
                 shapeContainer.appendChild(cell);
             }
         }
 
         blockElement.appendChild(shapeContainer);
         blockElement.addEventListener('dragstart', (e) => {
+            const rect = e.target.getBoundingClientRect();
+            const mouseX = e.clientX;
+            const mouseY = e.clientY;
+            
+            // Calculate offset from the top-left corner of the block
+            grabOffsetX = Math.floor((mouseX - rect.left) / 40); // Changed to 40
+            grabOffsetY = Math.floor((mouseY - rect.top) / 40); // Changed to 40
+            
             e.dataTransfer.setData('text/plain', JSON.stringify(block));
-            e.dataTransfer.setData('blockElement', blockElement.id); // Pass the block ID
+            e.dataTransfer.setData('blockElement', blockElement.id);
         });
         blocksContainer.appendChild(blockElement);
     }
@@ -84,17 +95,29 @@ function generateBlocks() {
 
 // Highlight potential drop positions
 function highlightDropPositions(block, x, y) {
-    clearHighlights(); // Clear any existing highlights
+    clearHighlights();
+    
+    // Adjust x and y based on grab offset
+    x = x - grabOffsetX;
+    y = y - grabOffsetY;
+    
+    // Check if block can be placed
+    if (!canPlaceBlock(block, x, y)) return;
+    
+    // Get grid cell size
+    const gridElement = document.getElementById('grid');
+    const firstCell = gridElement.querySelector('.cell');
+    const cellSize = firstCell ? firstCell.offsetWidth : 25; // Default to 25 if not found
+    
+    // Highlight cells where block will be placed
     for (let dy = 0; dy < block.shape.length; dy++) {
         for (let dx = 0; dx < block.shape[dy].length; dx++) {
             if (block.shape[dy][dx]) {
                 const cellX = x + dx;
                 const cellY = y + dy;
-                if (cellX < gridSize && cellY < gridSize && !grid[cellY][cellX]) {
-                    const cell = document.querySelector(`[data-x="${cellX}"][data-y="${cellY}"]`);
-                    if (cell) {
-                        cell.classList.add('highlight');
-                    }
+                const cell = document.querySelector(`[data-x="${cellX}"][data-y="${cellY}"]`);
+                if (cell) {
+                    cell.classList.add('highlight');
                 }
             }
         }
@@ -105,6 +128,11 @@ function highlightDropPositions(block, x, y) {
 function clearHighlights() {
     const highlightedCells = document.querySelectorAll('.highlight');
     highlightedCells.forEach(cell => cell.classList.remove('highlight'));
+    
+    if (ghostBlock) {
+        ghostBlock.remove();
+        ghostBlock = null;
+    }
 }
 
 // Handle drag over
@@ -124,33 +152,57 @@ function handleDragLeave(e) {
     clearHighlights();
 }
 
-// Handle block drop
+// Add this function to check if game is over
+function checkGameOver() {
+    for (let block of blocks) {
+        for (let y = 0; y < gridSize; y++) {
+            for (let x = 0; x < gridSize; x++) {
+                if (canPlaceBlock(block, x, y)) {
+                    return false; // Found a valid placement
+                }
+            }
+        }
+    }
+    return true; // No valid placements found
+}
+
+// Update the handleDrop function
 function handleDrop(e) {
     e.preventDefault();
-    clearHighlights(); // Clear highlights after drop
+    clearHighlights();
+    
     const data = JSON.parse(e.dataTransfer.getData('text/plain'));
     const blockElementId = e.dataTransfer.getData('blockElement');
     const cell = e.target;
-    const x = parseInt(cell.dataset.x);
-    const y = parseInt(cell.dataset.y);
-
-    if (canPlaceBlock(data, x, y)) {
-        placeBlock(data, x, y);
-        blocksPlaced++;
-
-        const blockElement = document.getElementById(blockElementId);
-        if (blockElement) {
-            blockElement.remove();
+    
+    if (cell.classList.contains('cell')) {
+        const x = parseInt(cell.dataset.x) - grabOffsetX;
+        const y = parseInt(cell.dataset.y) - grabOffsetY;
+        
+        if (canPlaceBlock(data, x, y)) {
+            placeBlock(data, x, y);
+            const blockElement = document.getElementById(blockElementId);
+            if (blockElement) {
+                blockElement.remove();
+            }
+            blocksPlaced++;
+            
+            checkRowsAndColumns();
+            
+            if (blocksPlaced === 3) {
+                generateBlocks();
+                blocksPlaced = 0;
+            }
+            
+            // Check for game over after placement
+            if (checkGameOver()) {
+                setTimeout(() => {
+                    alert('Leik lokið! Lokastig: ' + score);
+                    // Optionally reset the game
+                    startGame();
+                }, 500);
+            }
         }
-
-        checkRowsAndColumns();
-
-        if (blocksPlaced === 3) {
-            generateBlocks();
-            blocksPlaced = 0;
-        }
-    } else {
-        alert('Cannot place block here!');
     }
 }
 
@@ -179,7 +231,9 @@ function placeBlock(block, x, y) {
                 const cellY = y + dy;
                 grid[cellY][cellX] = true;
                 const cell = document.querySelector(`[data-x="${cellX}"][data-y="${cellY}"]`);
-                cell.classList.add('block');
+                if (cell) {
+                    cell.classList.add('block');
+                }
             }
         }
     }
@@ -200,10 +254,10 @@ function checkRowsAndColumns() {
             }
         }
         if (rowFull) {
+            // Highlight the row
             for (let x = 0; x < gridSize; x++) {
-                grid[y][x] = false;
                 const cell = document.querySelector(`[data-x="${x}"][data-y="${y}"]`);
-                cell.classList.remove('block');
+                cell.classList.add('row-highlight');
             }
             rowsCleared++;
         }
@@ -219,18 +273,35 @@ function checkRowsAndColumns() {
             }
         }
         if (columnFull) {
+            // Highlight the column
             for (let y = 0; y < gridSize; y++) {
-                grid[y][x] = false;
                 const cell = document.querySelector(`[data-x="${x}"][data-y="${y}"]`);
-                cell.classList.remove('block');
+                cell.classList.add('column-highlight');
             }
             columnsCleared++;
         }
     }
 
-    // Update score
-    score += (rowsCleared + columnsCleared) * 10;
-    document.getElementById('score').textContent = `Score: ${score}`;
+    // Wait for the highlight animation before clearing
+    if (rowsCleared > 0 || columnsCleared > 0) {
+        setTimeout(() => {
+            clearHighlights();
+            // Update score and clear cells
+            score += (rowsCleared + columnsCleared) * 10;
+            document.getElementById('score').textContent = `Stig: ${score}`;
+            
+            // Clear the highlighted cells
+            for (let y = 0; y < gridSize; y++) {
+                for (let x = 0; x < gridSize; x++) {
+                    if (grid[y][x]) {
+                        grid[y][x] = false;
+                        const cell = document.querySelector(`[data-x="${x}"][data-y="${y}"]`);
+                        cell.classList.remove('block', 'row-highlight', 'column-highlight');
+                    }
+                }
+            }
+        }, 500); // Match the animation duration
+    }
 }
 
 // Start the game

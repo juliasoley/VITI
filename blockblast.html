@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #6a30e5, #8e2de2);
+            background: linear-gradient(135deg, #8859ee, #eaeed2);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -17,6 +17,10 @@
 
         #game-container {
             text-align: center;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
         }
 
         #grid {
@@ -25,20 +29,25 @@
             grid-template-rows: repeat(8, 50px);
             gap: 5px;
             margin: 20px auto;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 5px;
+            border-radius: 6px;
         }
 
         .cell {
             width: 50px;
             height: 50px;
-            background-color: #fff;
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
 
         .block {
-            background-color: #00FF00;
-            border: 2px solid #008000;
+            background-color: #a461e4;
+            border: 2px solid #71168d;
+            border-radius: 5px;
         }
 
         #blocks-container {
@@ -64,8 +73,14 @@
         }
 
         .highlight {
-            background-color: rgba(0, 255, 0, 0.3) !important; /* Semi-transparent green */
-            border: 2px dashed #008000 !important; /* Dashed border */
+            background-color: rgba(255, 255, 255, 0.3) !important;
+            border: 2px dashed #ffffff !important;
+            animation: pulse 0.5s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.05); }
         }
 
         .back-btn {
@@ -85,6 +100,28 @@
         .back-btn:hover {
             background: #e0e0e0;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .row-highlight {
+            background-color: rgba(255, 255, 255, 0.5) !important;
+            animation: rowFlash 0.5s ease-in-out;
+        }
+
+        .column-highlight {
+            background-color: rgba(255, 255, 255, 0.3) !important;
+            animation: columnFlash 0.5s ease-in-out;
+        }
+
+        @keyframes rowFlash {
+            0% { transform: scaleY(1); }
+            50% { transform: scaleY(1.2); }
+            100% { transform: scaleY(1); }
+        }
+
+        @keyframes columnFlash {
+            0% { transform: scaleX(1); }
+            50% { transform: scaleX(1.2); }
+            100% { transform: scaleX(1); }
         }
     </style>
 </head>
