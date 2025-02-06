@@ -27,8 +27,8 @@
             display: grid;
             grid-template-columns: repeat(8, 50px);
             grid-template-rows: repeat(8, 50px);
-            gap: 5px;
-            margin: 20px auto;
+            gap: 6px;
+            margin: 1.5rem auto;
             background-color: rgba(255, 255, 255, 0.1);
             padding: 5px;
             border-radius: 6px;
@@ -39,9 +39,9 @@
             height: 50px;
             background-color: rgba(255, 255, 255, 0.2);
             border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: all 0.2s ease;
         }
 
         .block {
@@ -64,12 +64,18 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: transform 0.1s ease;
+        }
+
+        .block-piece:active {
+            transform: scale(0.98);
         }
 
         #score {
             margin-top: 20px;
             font-size: 20px;
             color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         .highlight {
@@ -84,54 +90,58 @@
         }
 
         .back-btn {
-            position: absolute;
+            position: fixed;
             top: 20px;
             right: 20px;
             background: #f5f5f5;
             color: #333;
-            padding: 8px 16px;
-            border-radius: 20px;
-            border: 1px solid #ddd;
-            font-size: 14px;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            border: 1px solid rgba(221, 221, 221, 0.3);
+            font-size: 0.9rem;
             transition: all 0.3s ease;
             cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(4px);
         }
 
         .back-btn:hover {
-            background: #e0e0e0;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .cell.empty {
-            background-color: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .cell.filled {
-            background-color: #8e2de2;
-            border: 2px solid #6a30e5;
-            border-radius: 4px;
-        }
-
-        .block-piece {
-            transition: transform 0.1s ease;
-        }
-
-        .block-piece:active {
-            transform: scale(0.95);
+            background: rgba(255, 255, 255, 1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         #game-over {
             display: none;
-            position: absolute;
+            position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.9);
             color: white;
-            padding: 20px;
-            border-radius: 10px;
+            padding: 2rem;
+            border-radius: 16px;
             text-align: center;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+
+        #game-over button {
+            margin-top: 1rem;
+            background: #8e2de2;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #game-over button:hover {
+            background: #6a30e5;
+            transform: translateY(-2px);
         }
     </style>
 </head>
