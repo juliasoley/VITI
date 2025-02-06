@@ -31,10 +31,11 @@ function startGame() {
     playerSequence = [];
     level = 1;
     isPlayerTurn = false;
-    statusText.textContent = 'Watch the sequence!';
+    statusText.textContent = 'Fylgstu með röðinni!';
     createGrid(); // Ensure the grid is created immediately
     generateSequence();
     playSequence();
+
 }
 
 // Generate a random sequence
@@ -50,7 +51,7 @@ function playSequence() {
         if (i >= sequence.length) {
             clearInterval(interval);
             isPlayerTurn = true;
-            statusText.textContent = 'Your turn!';
+            statusText.textContent = 'Þú átt leik!';
             return;
         }
         const cell = grid.children[sequence[i]];

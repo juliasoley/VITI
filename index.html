@@ -150,14 +150,14 @@
     <button class="logout-btn" id="logoutBtn">Logout</button>
 
     <div class="game-selection">
-        <h1>Welcome to VITI</h1>
-        <div class="section-title">Games</div>
-        <button class="game-button" onclick="window.location.href='memory.html'">Memory Game</button>
-        <button class="game-button" onclick="window.location.href='blockblast.html'">Block Blast</button>
-        <button class="game-button" onclick="window.location.href='puzzle.html'">Puzzle Game</button>
-        <div class="section-title" style="margin-top: 2rem;">More</div>
-        <button class="info-button" onclick="window.location.href='analysis.html'">Game Analysis</button>
-        <button class="info-button" onclick="window.location.href='about.html'">About VITI</button>
+        <h1>VITI</h1>
+        <div class="section-title">Leikir</div>
+        <button class="game-button" onclick="window.location.href='memory.html'">Minnisleikur Spil</button>
+        <button class="game-button" onclick="window.location.href='blockblast.html'">Formstappa</button>
+        <button class="game-button" onclick="window.location.href='puzzle.html'">Hermikráka</button>
+        <div class="section-title" style="margin-top: 2rem;">Fleira</div>
+        <button class="info-button" onclick="window.location.href='analysis.html'">Leikgreining</button>
+        <button class="info-button" onclick="window.location.href='about.html'">Um VITA</button>
     </div>
 
     <footer>
@@ -168,6 +168,7 @@
         if (!localStorage.getItem("username")) {
             window.location.href = "login.html";
         }
+        
 
         document.getElementById('logoutBtn').addEventListener('click', () => {
             localStorage.removeItem('username');
