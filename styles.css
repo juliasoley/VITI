@@ -1,0 +1,131 @@
+:root {
+    --primary-purple: #7b1fa2;
+    --dark-purple: #4a148c;
+    --light-purple: #9c27b0;
+    --accent-yellow: #ffeb3b;
+    --background-gradient: linear-gradient(135deg, #6a30e5, #8e2de2);
+    --card-bg: rgba(255, 255, 255, 0.1);
+    --text-color: white;
+    --button-bg: #f5f5f5;
+    --button-hover: #e0e0e0;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --border-radius: 12px;
+}
+
+body {
+    background: linear-gradient(160deg, #d9df1d6b, #6a30e58d);
+    min-height: 100vh;
+    margin: 0;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    color: var(--text-color);
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.game-container {
+    text-align: center;
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.button {
+    background: var(--button-bg);
+    color: #333;
+    padding: 0.8rem 1.5rem;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+}
+
+.button:hover {
+    background: var(--button-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.grid {
+    display: grid;
+    gap: 0.5rem;
+    margin: 1.5rem auto;
+    background-color: var(--card-bg);
+    padding: 0.5rem;
+    border-radius: calc(var(--border-radius) - 4px);
+}
+
+.cell {
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.highlight {
+    background-color: rgba(255, 255, 255, 0.3) !important;
+    border: 2px dashed #ffffff !important;
+    animation: pulse 0.5s infinite alternate;
+}
+
+@keyframes pulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.05); }
+}
+
+/* Card styles for memory game */
+.card {
+    perspective: 600px;
+}
+
+.card-inner {
+    transition: transform 0.4s ease-in-out;
+    transform-style: preserve-3d;
+}
+
+.card-front, .card-back {
+    backface-visibility: hidden;
+    border-radius: 8px;
+}
+
+.card-back {
+    background-color: var(--primary-purple);
+}
+
+.card-front {
+    background-color: var(--light-purple);
+    transform: rotateY(180deg);
+}
+
+.flipped {
+    transform: rotateY(180deg);
+}
+
+/* Analysis page specific */
+.analysis-container {
+    background: rgba(255, 255, 255, 0.95);
+    color: #2c3e50;
+    padding: 2.5rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    width: 500px;
+    text-align: center;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+
