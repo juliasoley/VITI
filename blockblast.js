@@ -70,8 +70,8 @@ function generateBlocks() {
             for (let x = 0; x < shape[y].length; x++) {
                 const cell = document.createElement('div');
                 cell.style.backgroundColor = shape[y][x] ? '#a461e4' : 'transparent';
-                cell.style.border = shape[y][x] ? '2px solid #71168d' : 'none';
-                cell.style.borderRadius = '5px';
+                cell.style.border = shape[y][x] ? '2px solidrgb(90, 22, 110)' : 'none';
+                cell.style.borderRadius = '4px';
                 shapeContainer.appendChild(cell);
             }
         }
@@ -152,21 +152,7 @@ function handleDragLeave(e) {
     clearHighlights();
 }
 
-// Add this function to check if game is over
-function checkGameOver() {
-    for (let block of blocks) {
-        for (let y = 0; y < gridSize; y++) {
-            for (let x = 0; x < gridSize; x++) {
-                if (canPlaceBlock(block, x, y)) {
-                    return false; // Found a valid placement
-                }
-            }
-        }
-    }
-    return true; // No valid placements found
-}
-
-// Update the handleDrop function
+// Handle block drop
 function handleDrop(e) {
     e.preventDefault();
     clearHighlights();
@@ -193,15 +179,6 @@ function handleDrop(e) {
                 generateBlocks();
                 blocksPlaced = 0;
             }
-            
-            // Check for game over after placement
-            if (checkGameOver()) {
-                setTimeout(() => {
-                    alert('Leik lokið! Lokastig: ' + score);
-                    // Optionally reset the game
-                    startGame();
-                }, 500);
-            }
         }
     }
 }
@@ -213,10 +190,8 @@ function canPlaceBlock(block, x, y) {
             if (block.shape[dy][dx]) {
                 const cellX = x + dx;
                 const cellY = y + dy;
-                if (cellX >= 0 && cellX < gridSize && cellY >= 0 && cellY < gridSize) {
-                    if (grid[cellY][cellX]) {
-                        return false;
-                    }
+                if (cellX >= gridSize || cellY >= gridSize || grid[cellY][cellX]) {
+                    return false;
                 }
             }
         }
@@ -231,24 +206,20 @@ function placeBlock(block, x, y) {
             if (block.shape[dy][dx]) {
                 const cellX = x + dx;
                 const cellY = y + dy;
-                if (cellX >= 0 && cellX < gridSize && cellY >= 0 && cellY < gridSize) {
-                    grid[cellY][cellX] = true;
-                    const cell = document.querySelector(`[data-x="${cellX}"][data-y="${cellY}"]`);
-                    if (cell) {
-                        cell.style.backgroundColor = '#a461e4';
-                        cell.style.border = '2px solid #71168d';
-                        cell.style.borderRadius = '5px';
-                    }
+                grid[cellY][cellX] = true;
+                const cell = document.querySelector(`[data-x="${cellX}"][data-y="${cellY}"]`);
+                if (cell) {
+                    cell.classList.add('block');
                 }
             }
         }
     }
 }
 
-// Update the checkRowsAndColumns function
+// Check for completed rows and columns
 function checkRowsAndColumns() {
-    let rowsToClear = [];
-    let columnsToClear = [];
+    let rowsCleared = 0;
+    let columnsCleared = 0;
 
     // Check rows
     for (let y = 0; y < gridSize; y++) {
@@ -260,7 +231,12 @@ function checkRowsAndColumns() {
             }
         }
         if (rowFull) {
-            rowsToClear.push(y);
+            for (let x = 0; x < gridSize; x++) {
+                grid[y][x] = false;
+                const cell = document.querySelector(`[data-x="${x}"][data-y="${y}"]`);
+                cell.classList.remove('block');
+            }
+            rowsCleared++;
         }
     }
 
@@ -274,40 +250,18 @@ function checkRowsAndColumns() {
             }
         }
         if (columnFull) {
-            columnsToClear.push(x);
-        }
-    }
-
-    // Clear only the completed rows and columns
-    if (rowsToClear.length > 0 || columnsToClear.length > 0) {
-        // Update score
-        score += (rowsToClear.length + columnsToClear.length) * 10;
-        document.getElementById('score').textContent = `Stig: ${score}`;
-
-        // Clear rows
-        rowsToClear.forEach(y => {
-            for (let x = 0; x < gridSize; x++) {
-                grid[y][x] = false;
-                const cell = document.querySelector(`[data-x="${x}"][data-y="${y}"]`);
-                if (cell) {
-                    cell.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
-                    cell.style.border = '1px solid rgba(255, 255, 255, 0.3)';
-                }
-            }
-        });
-
-        // Clear columns
-        columnsToClear.forEach(x => {
             for (let y = 0; y < gridSize; y++) {
                 grid[y][x] = false;
                 const cell = document.querySelector(`[data-x="${x}"][data-y="${y}"]`);
-                if (cell) {
-                    cell.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
-                    cell.style.border = '1px solid rgba(255, 255, 255, 0.3)';
-                }
+                cell.classList.remove('block');
             }
-        });
+            columnsCleared++;
+        }
     }
+
+    // Update score
+    score += (rowsCleared + columnsCleared) * 10;
+    document.getElementById('score').textContent = `Score: ${score}`;
 }
 
 // Start the game

@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #8859ee, #eaeed2);
+            background: linear-gradient(135deg, #8859ee, #c7e22d);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -47,17 +47,6 @@
         .block {
             background-color: #a461e4;
             border: 2px solid #71168d;
-            border-radius: 5px;
-            width: 50px;
-            height: 50px;
-            box-sizing: border-box;
-        }
-
-        .block-piece > div {
-            display: grid;
-            gap: 2px;
-            padding: 2px;
-            background-color: rgba(255, 255, 255, 0.1);
             border-radius: 5px;
         }
 
@@ -111,28 +100,6 @@
         .back-btn:hover {
             background: #e0e0e0;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .row-highlight {
-            background-color: rgba(255, 255, 255, 0.5) !important;
-            animation: rowFlash 0.5s ease-in-out;
-        }
-
-        .column-highlight {
-            background-color: rgba(255, 255, 255, 0.3) !important;
-            animation: columnFlash 0.5s ease-in-out;
-        }
-
-        @keyframes rowFlash {
-            0% { transform: scaleY(1); }
-            50% { transform: scaleY(1.2); }
-            100% { transform: scaleY(1); }
-        }
-
-        @keyframes columnFlash {
-            0% { transform: scaleX(1); }
-            50% { transform: scaleX(1.2); }
-            100% { transform: scaleX(1); }
         }
     </style>
 </head>
