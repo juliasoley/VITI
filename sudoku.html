@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VITI - Sudoku</title>
+    <link rel="icon" type="image/png" href="pix/viti.png">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(160deg, #d9df1d85, #6a30e58d);
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        #game-container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        #sudoku-grid {
+            display: grid;
+            grid-template-columns: repeat(9, 40px);
+            grid-template-rows: repeat(9, 40px);
+            gap: 2px;
+            margin: 0 auto;
+        }
+
+        .cell {
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            font-size: 1.2rem;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: rgba(78,6, 124, 0.8); 2
+            font-weight: bold;
+            transition: all 0.2s ease;
+
+        }
+
+        /* Thick vertical borders between boxes */
+        .cell:nth-child(3n) {
+            border-right: 3px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .cell:nth-child(9n) {
+            border-right: none;
+        }
+
+        /* Thick horizontal borders between boxes */
+        .cell:nth-child(n+19):nth-child(-n+27),
+        .cell:nth-child(n+46):nth-child(-n+54) {
+            border-bottom: 3px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .cell.fixed {
+            background: rgba(255, 255, 255, 0.1);2
+            font-weight: bold;
+            color: rgba(78, 26, 124, 0.8);
+        }
+
+        .cell:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.402);
+        }
+
+        .cell.error {
+            background: rgba(255, 0, 0, 0.2);
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(221, 221, 221, 0.3);
+            font-size: 14px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .button {
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: 1px solid rgba(221, 221, 221, 0.3);
+            font-size: 14px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        #timer {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 500px) {
+            .cell {
+                font-size: 1rem;
+            }
+        }
+
+        .difficulty-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .difficulty-btn {
+            background: rgba(255, 255, 255, 0.7);
+            color: #333;
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(221, 221, 221, 0.3);
+            font-size: 14px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .difficulty-btn:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+        }
+
+        .difficulty-btn.active {
+            background: rgba(255, 255, 255, 0.9);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="window.location.href='index.html'">Til Baka</button>
+    <div id="game-container">
+        <h1>Sudoku</h1>
+        <div id="sudoku-grid"></div>
+        <div class="controls">
+            <div id="timer">Tími: 0s</div>
+            <button class="button" id="new-game-btn">Nýr leikur</button>
+        </div>
+
+        <div class="difficulty-controls">
+            <button class="difficulty-btn" data-difficulty="easy">Auðvelt</button>
+            <button class="difficulty-btn" data-difficulty="medium">Miðlungs</button>
+            <button class="difficulty-btn" data-difficulty="hard">Erfitt</button>
+        </div>
+    </div>
+    <script src="sudoku.js"></script>
+</body>
+</html>
