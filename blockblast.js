@@ -213,8 +213,10 @@ function canPlaceBlock(block, x, y) {
             if (block.shape[dy][dx]) {
                 const cellX = x + dx;
                 const cellY = y + dy;
-                if (cellX >= gridSize || cellY >= gridSize || grid[cellY][cellX]) {
-                    return false;
+                if (cellX >= 0 && cellX < gridSize && cellY >= 0 && cellY < gridSize) {
+                    if (grid[cellY][cellX]) {
+                        return false;
+                    }
                 }
             }
         }
@@ -229,20 +231,24 @@ function placeBlock(block, x, y) {
             if (block.shape[dy][dx]) {
                 const cellX = x + dx;
                 const cellY = y + dy;
-                grid[cellY][cellX] = true;
-                const cell = document.querySelector(`[data-x="${cellX}"][data-y="${cellY}"]`);
-                if (cell) {
-                    cell.classList.add('block');
+                if (cellX >= 0 && cellX < gridSize && cellY >= 0 && cellY < gridSize) {
+                    grid[cellY][cellX] = true;
+                    const cell = document.querySelector(`[data-x="${cellX}"][data-y="${cellY}"]`);
+                    if (cell) {
+                        cell.style.backgroundColor = '#a461e4';
+                        cell.style.border = '2px solid #71168d';
+                        cell.style.borderRadius = '5px';
+                    }
                 }
             }
         }
     }
 }
 
-// Check for completed rows and columns
+// Update the checkRowsAndColumns function
 function checkRowsAndColumns() {
-    let rowsCleared = 0;
-    let columnsCleared = 0;
+    let rowsToClear = [];
+    let columnsToClear = [];
 
     // Check rows
     for (let y = 0; y < gridSize; y++) {
@@ -254,12 +260,7 @@ function checkRowsAndColumns() {
             }
         }
         if (rowFull) {
-            // Highlight the row
-            for (let x = 0; x < gridSize; x++) {
-                const cell = document.querySelector(`[data-x="${x}"][data-y="${y}"]`);
-                cell.classList.add('row-highlight');
-            }
-            rowsCleared++;
+            rowsToClear.push(y);
         }
     }
 
@@ -273,34 +274,39 @@ function checkRowsAndColumns() {
             }
         }
         if (columnFull) {
-            // Highlight the column
-            for (let y = 0; y < gridSize; y++) {
-                const cell = document.querySelector(`[data-x="${x}"][data-y="${y}"]`);
-                cell.classList.add('column-highlight');
-            }
-            columnsCleared++;
+            columnsToClear.push(x);
         }
     }
 
-    // Wait for the highlight animation before clearing
-    if (rowsCleared > 0 || columnsCleared > 0) {
-        setTimeout(() => {
-            clearHighlights();
-            // Update score and clear cells
-            score += (rowsCleared + columnsCleared) * 10;
-            document.getElementById('score').textContent = `Stig: ${score}`;
-            
-            // Clear the highlighted cells
-            for (let y = 0; y < gridSize; y++) {
-                for (let x = 0; x < gridSize; x++) {
-                    if (grid[y][x]) {
-                        grid[y][x] = false;
-                        const cell = document.querySelector(`[data-x="${x}"][data-y="${y}"]`);
-                        cell.classList.remove('block', 'row-highlight', 'column-highlight');
-                    }
+    // Clear only the completed rows and columns
+    if (rowsToClear.length > 0 || columnsToClear.length > 0) {
+        // Update score
+        score += (rowsToClear.length + columnsToClear.length) * 10;
+        document.getElementById('score').textContent = `Stig: ${score}`;
+
+        // Clear rows
+        rowsToClear.forEach(y => {
+            for (let x = 0; x < gridSize; x++) {
+                grid[y][x] = false;
+                const cell = document.querySelector(`[data-x="${x}"][data-y="${y}"]`);
+                if (cell) {
+                    cell.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+                    cell.style.border = '1px solid rgba(255, 255, 255, 0.3)';
                 }
             }
-        }, 500); // Match the animation duration
+        });
+
+        // Clear columns
+        columnsToClear.forEach(x => {
+            for (let y = 0; y < gridSize; y++) {
+                grid[y][x] = false;
+                const cell = document.querySelector(`[data-x="${x}"][data-y="${y}"]`);
+                if (cell) {
+                    cell.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+                    cell.style.border = '1px solid rgba(255, 255, 255, 0.3)';
+                }
+            }
+        });
     }
 }
 
