@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About VITI</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #6a30e5, #8e2de2);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+
+        .about-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 600px;
+            text-align: center;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        p {
+            color: #2c3e50;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .back-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #6a30e5, #8e2de2);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(106, 48, 229, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="about-container">
+        <h1>Um Vita</h1>
+        <p>
+            Viti er leikjaforrit sem örvar heilann og hjálpar notendum að fylgjast með hugrænni heilsu
+
+        </p>
+        <p>
+            Gervigreindarlíkan greinir hvort merki séu um óeðlilega hnignun á hugrænni færni 
+
+        </p>
+
+        <p>
+            ...
+
+        </p>
+        
+        <button class="back-btn" onclick="window.location.href='index.html'">Til Baka</button>
+    </div>
+</body>
+</html>

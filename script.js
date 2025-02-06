@@ -6,6 +6,8 @@ let lockBoard = false;
 let matchesFound = 0;
 let timerInterval = null;
 let startTime = 0;
+let isPaused = false;
+let elapsedTime = 0; // Track elapsed time when paused
 
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
@@ -93,12 +95,13 @@ function checkWin() {
 }
 
 function startTimer() {
-  startTime = Date.now();
-  timerInterval = setInterval(() => {
-    const currentTime = Date.now();
-    const elapsed = Math.floor((currentTime - startTime) / 1000);
-    document.getElementById("timer").textContent = "Time: " + elapsed + "s";
-  }, 1000);
+  if (!timerInterval) {
+    startTime = Date.now() - elapsedTime * 1000;
+    timerInterval = setInterval(() => {
+      elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+      document.getElementById("timer").textContent = "Tími: " + elapsedTime + "s";
+    }, 1000);
+  }
 }
 
 function stopTimer() {
@@ -108,7 +111,8 @@ function stopTimer() {
 
 function resetTimer() {
   stopTimer();
-  document.getElementById("timer").textContent = "Time: 0s";
+  elapsedTime = 0; // Reset elapsed time
+  document.getElementById("timer").textContent = "Tími: 0s";
 }
 
 function resetGameVariables() {
@@ -118,18 +122,33 @@ function resetGameVariables() {
   secondCard = null;
   document.getElementById("status").textContent = "";
   deck = [...cardFaces, ...cardFaces];
-  resetTimer();
 }
 
 function startGame() {
-  resetGameVariables();
-  shuffle(deck);
-  createBoard();
-  startTimer();
+  if (isPaused) {
+    isPaused = false;
+    startBtn.textContent = "Pása";
+    startTimer();
+  } else {
+    resetGameVariables();
+    shuffle(deck);
+    createBoard();
+    startTimer();
+  }
+}
+
+function pauseGame() {
+  isPaused = true;
+  startBtn.textContent = "Halda áfram";
+  stopTimer();
 }
 
 function resetGame() {
-  startGame();
+  resetGameVariables();
+  shuffle(deck);
+  createBoard();
+  resetTimer();
+  startGame(); // Automatically start the game after reset
 }
 
 // Add logout functionality to reset stats
@@ -155,13 +174,36 @@ function showStats() {
     alert(`${username}'s Stats:\nMatches: ${stats.matches}\nGames Played: ${stats.gamesPlayed}`);
 }
 
-// Call `updateStats()` when a game ends
-document.getElementById("resetBtn").addEventListener("click", () => {
-    updateStats(matchesFound); // Update stats with matches found
-    showStats(); // Display stats
+// Remove the stats display from the reset button click
+document.getElementById("resetBtn").removeEventListener("click", () => {
+    updateStats(matchesFound);
+    showStats();
 });
 
-document.getElementById("startBtn").addEventListener("click", startGame);
+// Only reset the game when the reset button is clicked
 document.getElementById("resetBtn").addEventListener("click", resetGame);
 
-window.addEventListener("load", startGame);
+// Update the event listener for the start/pause button
+document.getElementById("startBtn").addEventListener("click", () => {
+  if (isPaused) {
+    startGame();
+  } else {
+    pauseGame();
+  }
+});
+
+// Initialize the game on page load
+window.addEventListener("load", () => {
+  startGame();
+});
+
+// Update stats display
+function updateStatsDisplay() {
+    const stats = JSON.parse(localStorage.getItem("stats")) || { matches: 0, gamesPlayed: 0 };
+    document.getElementById("total-games").textContent = stats.gamesPlayed;
+    document.getElementById("total-matches").textContent = stats.matches;
+}
+
+// Call this function when the page loads
+window.addEventListener("load", updateStatsDisplay);
+

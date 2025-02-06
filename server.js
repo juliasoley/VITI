@@ -7,55 +7,29 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-// Connect to PostgreSQL
+// PostgreSQL connection settings
 const pool = new Pool({
-    user: 'your_pg_user',
+    user: 'postgres', // Replace with your username
     host: 'localhost',
-    database: 'viti_game',
-    password: 'your_password',
+    database: 'viti_game', // The database you just created
+    password: 'Viti', // Your PostgreSQL password
     port: 5432, // Default PostgreSQL port
 });
 
-pool.query(`CREATE TABLE IF NOT EXISTS users (
-    username TEXT PRIMARY KEY,
-    matches INTEGER DEFAULT 0,
-    gamesPlayed INTEGER DEFAULT 0
-)`);
-
-app.post('/login', async (req, res) => {
-    const { username } = req.body;
-    try {
-        const result = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
-
-        if (result.rows.length > 0) {
-            res.json(result.rows[0]);
-        } else {
-            await pool.query('INSERT INTO users (username) VALUES ($1)', [username]);
-            res.json({ username, matches: 0, gamesPlayed: 0 });
-        }
-    } catch (error) {
-        res.status(500).json({ error: 'Database error' });
+// Test the connection
+pool.query('SELECT NOW()', (err, res) => {
+    if (err) {
+        console.error('Error connecting to PostgreSQL:', err);
+    } else {
+        console.log('Connected to PostgreSQL at:', res.rows[0].now);
     }
 });
 
-app.post('/update-stats', async (req, res) => {
-    const { username, matches, gamesPlayed } = req.body;
-    try {
-        await pool.query(
-            'UPDATE users SET matches = matches + $1, gamesPlayed = gamesPlayed + $2 WHERE username = $3',
-            [matches, gamesPlayed, username]
-        );
-        res.json({ message: 'Stats updated successfully' });
-    } catch (error) {
-        res.status(500).json({ error: 'Database error' });
-    }
-});
-
+// Example route to fetch user stats
 app.get('/stats/:username', async (req, res) => {
     const { username } = req.params;
     try {
         const result = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
-
         if (result.rows.length > 0) {
             res.json(result.rows[0]);
         } else {
@@ -66,7 +40,7 @@ app.get('/stats/:username', async (req, res) => {
     }
 });
 
-// Start server
+// Start the server
 const PORT = 5000;
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
