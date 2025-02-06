@@ -69,8 +69,8 @@ function generateBlocks() {
         for (let y = 0; y < shape.length; y++) {
             for (let x = 0; x < shape[y].length; x++) {
                 const cell = document.createElement('div');
-                cell.style.backgroundColor = shape[y][x] ? '#a461e4' : 'transparent';
-                cell.style.border = shape[y][x] ? '2px solidrgb(90, 22, 110)' : 'none';
+                cell.style.backgroundColor = shape[y][x] ? '#7b1fa2' : 'transparent';
+                cell.style.border = shape[y][x] ? '2px solid #4a148c' : 'none';
                 cell.style.borderRadius = '4px';
                 shapeContainer.appendChild(cell);
             }
@@ -162,9 +162,13 @@ function handleDrop(e) {
     const cell = e.target;
     
     if (cell.classList.contains('cell')) {
-        const x = parseInt(cell.dataset.x) - grabOffsetX;
-        const y = parseInt(cell.dataset.y) - grabOffsetY;
+        // Calculate the correct position considering the grab offset
+        const cellX = parseInt(cell.dataset.x);
+        const cellY = parseInt(cell.dataset.y);
+        const x = cellX - grabOffsetX;
+        const y = cellY - grabOffsetY;
         
+        // Check if the block can be placed at the calculated position
         if (canPlaceBlock(data, x, y)) {
             placeBlock(data, x, y);
             const blockElement = document.getElementById(blockElementId);
@@ -209,7 +213,9 @@ function placeBlock(block, x, y) {
                 grid[cellY][cellX] = true;
                 const cell = document.querySelector(`[data-x="${cellX}"][data-y="${cellY}"]`);
                 if (cell) {
-                    cell.classList.add('block');
+                    cell.style.backgroundColor = '#7b1fa2';
+                    cell.style.border = '2px solid #4a148c';
+                    cell.style.borderRadius = '4px';
                 }
             }
         }
@@ -234,7 +240,11 @@ function checkRowsAndColumns() {
             for (let x = 0; x < gridSize; x++) {
                 grid[y][x] = false;
                 const cell = document.querySelector(`[data-x="${x}"][data-y="${y}"]`);
-                cell.classList.remove('block');
+                if (cell) {
+                    cell.style.backgroundColor = ''; // Reset to default
+                    cell.style.border = ''; // Reset to default
+                    cell.style.borderRadius = ''; // Reset to default
+                }
             }
             rowsCleared++;
         }
@@ -253,7 +263,11 @@ function checkRowsAndColumns() {
             for (let y = 0; y < gridSize; y++) {
                 grid[y][x] = false;
                 const cell = document.querySelector(`[data-x="${x}"][data-y="${y}"]`);
-                cell.classList.remove('block');
+                if (cell) {
+                    cell.style.backgroundColor = ''; // Reset to default
+                    cell.style.border = ''; // Reset to default
+                    cell.style.borderRadius = ''; // Reset to default
+                }
             }
             columnsCleared++;
         }

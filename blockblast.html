@@ -45,8 +45,8 @@
         }
 
         .block {
-            background-color: #a461e4;
-            border: 2px solid #71168d;
+            background-color: #7b1fa2;
+            border: 2px solid #4a148c;
             border-radius: 5px;
         }
 
@@ -101,6 +101,38 @@
             background: #e0e0e0;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
+
+        .cell.empty {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .cell.filled {
+            background-color: #7b1fa2;
+            border: 2px solid #4a148c;
+            border-radius: 4px;
+        }
+
+        .block-piece {
+            transition: transform 0.1s ease;
+        }
+
+        .block-piece:active {
+            transform: scale(0.95);
+        }
+
+        #game-over {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -110,6 +142,10 @@
         <div id="grid"></div>
         <div id="blocks-container"></div>
         <div id="score">Stig: 0</div>
+        <div id="game-over">
+            <h2>Leikur Lokinn!</h2>
+            <button onclick="resetGame()">Spila Aftur</button>
+        </div>
     </div>
     <script src="blockblast.js"></script>
 </body>
